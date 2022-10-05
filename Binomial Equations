@@ -1,0 +1,216 @@
+def denominator(p):
+    count = 1
+    for i in range(1, p + 1):
+        count = count * i
+    return count
+
+def equation(power, term):
+    d = denominator(term)
+    n = 1
+    for i in range(power - term + 1, power + 1):
+        n = n * i
+    multiplier = n / d
+    return multiplier
+
+def row(power):
+    r = []
+    for i in range(power + 1):
+        r.append(str(int((equation(power, i)))))
+    r1 = " ".join(r)
+    return r1
+
+def row_list(power):
+    r = []
+    for i in range(power + 1):
+        r.append(str(int((equation(power, i)))))
+    return r
+
+def letter(a):
+    alphabet = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
+    for i in range(26):
+        if alphabet[i] == a:
+            return True
+    else:
+        return False
+
+def b_split(equation):
+    split = []
+    temp = []
+    for i in equation:
+        if i == "(" or i == ")":
+            pass
+        elif i == "+" or i == "^":
+            split.append(temp)
+            temp = []
+        elif i == "-":
+            split.append(temp)
+            temp = []
+            temp.append("-")
+        else:
+            temp.append(str(i))
+    split.append(temp)
+    if len(split) == 4:
+        split.pop(0)
+    return split
+
+def pascal(power1, power2):
+    rows = []
+    if power1 > power2:
+        hold = power1
+        power1 = power2
+        power2 = hold
+    for i in range(power1, power2 + 1):
+        rows.append(row(i))
+    return rows
+
+def equation1(variables):
+    a = variables.pop(-1)
+    b = int("".join(a))
+    multiplier = row_list(b)
+    holder = []
+    answer = []
+    number = []
+    var = []
+    number1 = []
+    var1 = []
+    varcomb = []
+    for i in range(b + 1):
+        for d in variables[0]:
+            f = letter(d)
+            if f != True:
+                c = "".join(d)
+                number.append(c)
+            else:
+                c = "".join(d)
+                var.append(c)
+        for d in variables[1]:
+            f = letter(d)
+            if f != True:
+                c = "".join(d)
+                number1.append(c)
+            else:
+                c = "".join(d)
+                var1.append(c)
+        if len(number) == 0:
+            number.append("1")
+        if len(number1) == 0:
+            number1.append("1")
+        e = int("".join(number)) ** (b - i)
+        g = int("".join(number1)) ** i
+        h = int(multiplier[i])
+        j = e * g * h
+        holder.append(j)
+        varcomb = var + var1
+        l = []
+        count = 0
+        for k in range(len(var)):
+            l.append(b - i)
+        for k in range(len(var1)):
+            l.append(i)
+        for p in range(len(l)):           
+            if l[count] == 0:
+                l.pop(count)
+                varcomb.pop(count)
+            else:    
+                count = count + 1
+        m = []
+        for n in range(len(varcomb)):
+            o = varcomb[n] + "^" + str(l[n]) + ","
+            m.append(o)
+        r = ""
+        for q in range(len(m)):
+            r += m[q]
+        s = str(holder[i]) + r
+        answer.append(s)
+        number = []
+        var = []
+        number1 = []
+        var1 = []
+        l = []
+    answer = "  ".join(answer)
+    return answer
+        
+
+
+def p():
+    test = False
+    while test == False:
+        power = input("Enter the power of the binomial equation: ")
+        if int(power) >= 1:
+            test = True
+            return int(power)
+        else:
+            print("Negative and Decimal numbers are not permitted")
+
+def t():
+    test = False
+    while test == False:
+        term = input("Enter the term you would like to find here: ")
+        if int(term) in range(int(power) + 1):
+            return int(term) - 1
+            test = True
+        else:
+            print("The term must be a whole number between and including zero and", str(power))
+
+def e():
+    print("Enter your Binomial Equation as follows")
+    print("(variables)^power")
+    print("Inside the brackets, you should enter all of your different variables - numbers, letters or both- with no spaces")
+    print("\'power\' should be a positive whole number and should follow the \'^\' symbol")
+    bracket = input()
+    return bracket
+
+T = False
+while T == False:
+    print(
+        """
+        These are all the different function that this code can do:
+            1) Find the multiplier of any term in any row of Pascal's Triangle
+            2) Find all terms in any row of Pascal's Triangle
+            3) Print a certain range of rows from Pascal's Triangle
+            4) Expand Binomial Equations with unkown and known variables
+            
+            or type "exit" to exit the code
+        
+        """
+    )
+    choice = input("What function would you like this code to run [1/2/3/4]: ")
+
+    if choice == "1":
+        T = True
+        power = p()
+        term = t()
+        multiplier = equation(power, term)
+        print("The multiplier for", str(power), "choose", str(term), "is", int(multiplier))
+    elif choice == "2":
+        T = True
+        power = p()
+        line = row(power)
+        print()
+        print("This row of Pascal's Triangle is as follows:")
+        print("".join(line))
+    elif choice == "3":
+        T = True
+        print("Enter the range of the Triangle you would like to view, the Triangle will contain all rows between and including both of your inputs")
+        power1 = p()
+        power2 = p()
+        range = pascal(power1, power2)
+        triangle = "\n".join(range)
+        print(triangle)
+    elif choice == "4":
+        T = True
+        bracket = e()
+        variables = b_split(bracket)
+        solution = equation1(variables)
+        print(solution)
+    elif choice == "secret":
+        T = True
+        print("Debugging mode")
+        a = input("Enter banana: ")
+        print(letter(a))
+    elif choice == "exit":
+        print("You have left the program")
+        break
+    else:
+        print()
+        print("Please enter either a, b or c, or type \'exit\' to quit the program")
