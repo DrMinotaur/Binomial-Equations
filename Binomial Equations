@@ -113,9 +113,22 @@ def equation1(variables):
                 varcomb.pop(count)
             else:    
                 count = count + 1
+        u = []
+        count = -1
+        for t in range(len(varcomb)):
+            count += 1
+            if varcomb[count] in u:
+                v = varcomb.pop(count)
+                w = l.pop(count)
+                for x in range(len(u)):
+                    if v == u[x]:
+                        l[x] += w
+                count = count - 1
+            else:
+                u.append(varcomb[count])
         m = []
         for n in range(len(varcomb)):
-            o = varcomb[n] + "^" + str(l[n]) + ","
+            o = "," + varcomb[n] + "^" + str(l[n])
             m.append(o)
         r = ""
         for q in range(len(m)):
